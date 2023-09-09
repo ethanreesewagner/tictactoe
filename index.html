@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe against bot</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body style="background-color:darkolivegreen; color:white">
+    <center>
+        <h1>Tic-Tac-Toe</h1>
+        <p id="game" style="font-size: 30px;"></p>
+        <p id="result" style="font-size: 24px;"></p>
+        <h1>Enter the square's number</h1>
+        <input style="color:black;" id="inputNumber" type="number" min="1" max="9" placeholder="#"> <br>
+        <button style="color: black; " onclick="makeMove();">Submit</button>
+        <button style="color:black;" onclick="resetGame();">Reset</button>
+    </center>
+    
+    <script>
+        var grid = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+        var currentPlayer = "X";
+        var gameEnded = false;
+
+        function board(a, b, c, d, e, f, g, h, i) {
+            document.getElementById("game").innerHTML = `
+            ${a}|${b}|${c}<br>
+            -----<br>
+            ${d}|${e}|${f}<br>
+            -----<br>
+            ${g}|${h}|${i}
+            `;
+        }
+
+        function display() {
+            board(grid[0], grid[1], grid[2], grid[3], grid[4], grid[5], grid[6], grid[7], grid[8]);
+        }
+
+        function makeMove() {
+            if (gameEnded) {
+                return; // Don't allow moves after the game has ended.
+            }
+
+            var inputNumber = document.getElementById("inputNumber").value;
+            var index = inputNumber - 1;
+
+            if (index >= 0 && index < 9 && grid[index] === " ") {
+                grid[index] = currentPlayer;
+                display();
+
+                if (checkWin(currentPlayer)) {
+                    document.getElementById("result").textContent = `${currentPlayer} wins!`;
+                    gameEnded = true;
+                } else if (grid.indexOf(" ") === -1) {
+                    document.getElementById("result").textContent = "It's a draw!";
+                    gameEnded = true;
+                } else {
+                    currentPlayer = (currentPlayer === "X") ? "O" : "X";
+                }
+            }
+        }
+
+        function checkWin(player) {
+            // Check rows, columns, and diagonals for a win.
+            return (
+                (grid[0] === player && grid[1] === player && grid[2] === player) ||
+                (grid[3] === player && grid[4] === player && grid[5] === player) ||
+                (grid[6] === player && grid[7] === player && grid[8] === player) ||
+                (grid[0] === player && grid[3] === player && grid[6] === player) ||
+                (grid[1] === player && grid[4] === player && grid[7] === player) ||
+                (grid[2] === player && grid[5] === player && grid[8] === player) ||
+                (grid[0] === player && grid[4] === player && grid[8] === player) ||
+                (grid[2] === player && grid[4] === player && grid[6] === player)
+            );
+        }
+
+        function resetGame() {
+            grid = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+            currentPlayer = "X";
+            gameEnded = false;
+            document.getElementById("result").textContent = "";
+            display();
+        }
+
+        // Initial display
+        display();
+    </script>
+</body>
+</html>
